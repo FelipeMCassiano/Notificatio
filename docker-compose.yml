@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+    # notificatio:
+    #   build: 
+    #     context: ./notificatio/Dockerfile
+    #     hostname: notificatio
+
+    rabbitmq:
+        image: rabbitmq:3.13-management
+        hostname: rabbitmq
+        ports:
+            - 5672:5672
+            - 15672:15672
