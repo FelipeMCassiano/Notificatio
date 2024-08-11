@@ -1,0 +1,8 @@
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.csproj.AssemblyReference.cache
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.GeneratedMSBuildEditorConfig.editorconfig
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.AssemblyInfoInputs.cache
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.AssemblyInfo.cs
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.csproj.CoreCompileInputs.cache
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.MvcApplicationPartsAssemblyInfo.cs
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.MvcApplicationPartsAssemblyInfo.cache
+/home/felipe/projects/notificatio/sender/obj/Debug/net8.0/sender.sourcelink.json

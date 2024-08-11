@@ -1,5 +1,5 @@
-using Send.Models;
 using Send.Service;
+using Send.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,49 +2,77 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using System.Net.Mail;
+using System.Net;
+using reciever.Models;
 
 namespace reciever.Service;
 
-public class Service
+public class ServiceMsg
 {
-    IModel _channel;
-    string _queueName;
+    private IModel _channel;
+    private SmtpClient smtpClient;
+    private static MailAddress _fromAddress = new MailAddress("demoraiscassianofelipe@gmail.com", "sender");
 
-    public Service()
+    public ServiceMsg()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.ExchangeDeclare(exchange: "messages", type: ExchangeType.Direct); ;
-        _queueName = _channel.QueueDeclare().QueueName;
+        var fromPassoword = "xvxp aqtz dusb glrx";
+
+        smtpClient = new SmtpClient
+        {
+            Host = "smtp.gmail.com",
+            Port = 587,
+            EnableSsl = true,
+            DeliveryMethod = SmtpDeliveryMethod.Network,
+            UseDefaultCredentials = false,
+            Credentials = new NetworkCredential(_fromAddress.Address, fromPassoword)
+
+        };
     }
 
 
-    public Task ReciveEmail()
+    public Task ReceiveMessage(CancellationToken cancellationToken)
     {
-
-        _channel.QueueBind(queue: _queueName, exchange: "messages", routingKey: "email");
+        var queueName = _channel.QueueDeclare().QueueName;
+        _channel.QueueBind(queue: queueName, exchange: "messages", routingKey: "email");
 
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             var routingKey = ea.RoutingKey;
 
-            var email = JsonSerializer.Serialize(message);
+            var email = JsonSerializer.Deserialize<MessageModel>(message);
+            if (email == null)
+            {
+                throw new Exception();
+            }
 
-            // TODO: method to send a sms
+            var toAddress = new MailAddress(email.recipient, "Recipient");
 
+            await SendEmail(toAddress, email, cancellationToken);
         };
+        _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
 
         return Task.CompletedTask;
     }
-    private Task SendEmail()
+    private async Task SendEmail(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
     {
 
-        return Task.CompletedTask;
+        using (var message = new MailMessage(_fromAddress, toAddress)
+        {
+            Subject = email.subject,
+            Body = email.message
+        })
+        {
+            await smtpClient.SendMailAsync(message, cancellationToken);
+        }
 
     }
 }

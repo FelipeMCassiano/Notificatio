@@ -1,8 +1,10 @@
 namespace reciever;
+using reciever.Service;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly ServiceMsg service = new ServiceMsg();
 
     public Worker(ILogger<Worker> logger)
     {
@@ -13,12 +15,18 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+
+            try
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await service.ReceiveMessage(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send email at {time}", DateTime.Now);
             }
 
-            await Task.Delay(1000, stoppingToken);
+
+            await Task.Delay(60000, stoppingToken);
         }
     }
     public override Task StopAsync(CancellationToken cancellationToken)
