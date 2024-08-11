@@ -13,11 +13,12 @@ public class ServiceMsg
     private IModel _channel;
     private SmtpClient smtpClient;
     private static MailAddress _fromAddress = new MailAddress("demoraiscassianofelipe@gmail.com", "sender");
+    private List<MailMessage> _emailMessages = new List<MailMessage>();
 
     public ServiceMsg()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
-        using var connection = factory.CreateConnection();
+        var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.ExchangeDeclare(exchange: "messages", type: ExchangeType.Direct); ;
         var fromPassoword = "xvxp aqtz dusb glrx";
@@ -56,24 +57,33 @@ public class ServiceMsg
 
             var toAddress = new MailAddress(email.recipient, "Recipient");
 
-            await SendEmail(toAddress, email, cancellationToken);
+            await CreateEmailMessage(toAddress, email, cancellationToken);
         };
         _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
 
+
         return Task.CompletedTask;
     }
-    private async Task SendEmail(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
+    private Task CreateEmailMessage(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
     {
 
-        using (var message = new MailMessage(_fromAddress, toAddress)
+        var message = new MailMessage(_fromAddress, toAddress)
         {
             Subject = email.subject,
             Body = email.message
-        })
-        {
-            await smtpClient.SendMailAsync(message, cancellationToken);
-        }
+        };
 
+        _emailMessages.Add(message);
+
+        return Task.CompletedTask;
+
+    }
+    public async Task SendEmails()
+    {
+        for (int i = 0; i < _emailMessages.Count(); i++)
+        {
+            await smtpClient.SendMailAsync(_emailMessages[i]);
+        }
     }
 }
 

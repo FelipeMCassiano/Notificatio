@@ -19,6 +19,7 @@ public class Worker : BackgroundService
             try
             {
                 await service.ReceiveMessage(stoppingToken);
+                await service.SendEmails();
             }
             catch (Exception ex)
             {
@@ -26,7 +27,7 @@ public class Worker : BackgroundService
             }
 
 
-            await Task.Delay(60000, stoppingToken);
+            await Task.Delay(6000, stoppingToken);
         }
     }
     public override Task StopAsync(CancellationToken cancellationToken)

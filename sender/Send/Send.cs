@@ -13,7 +13,7 @@ public class SendService
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
 
-        using var connection = factory.CreateConnection();
+        var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
     }
     private Task CreateExchange()
