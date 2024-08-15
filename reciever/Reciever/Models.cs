@@ -1,18 +1,14 @@
 using System.Text.Json.Serialization;
 namespace reciever.Models;
 
-public record MessageModel
-{
+public record MessageModel(
+    [property: JsonPropertyName("id")] int id,
+    [property: JsonPropertyName("to")] string recipient,
+    [property: JsonPropertyName("subject")] string message,
+    [property: JsonPropertyName("body")] string subject,
+    [property: JsonPropertyName("type")] MessageType messageType
+);
 
-    [JsonPropertyName("to")]
-    public required string recipient { get; set; }
-    [JsonPropertyName("subject")]
-    public required string message { get; set; }
-    [JsonPropertyName("body")]
-    public required string subject { get; set; }
-    [JsonPropertyName("type")]
-    public required MessageType messageType { get; set; }
-}
 
 public enum MessageType
 {

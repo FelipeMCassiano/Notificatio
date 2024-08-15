@@ -12,7 +12,7 @@ public class ServiceMsg
 {
     private IModel _channel;
     private SmtpClient smtpClient;
-    private static MailAddress _fromAddress = new MailAddress("demoraiscassianofelipe@gmail.com", "sender");
+    private static MailAddress _fromAddress = new MailAddress("demoraiscassianofelipe@gmail.com");
     private List<MailMessage> _emailMessages = new List<MailMessage>();
 
     public ServiceMsg()
@@ -55,7 +55,7 @@ public class ServiceMsg
                 throw new Exception();
             }
 
-            var toAddress = new MailAddress(email.recipient, "Recipient");
+            var toAddress = new MailAddress(email.recipient);
 
             await CreateEmailMessage(toAddress, email, cancellationToken);
         };
@@ -82,7 +82,8 @@ public class ServiceMsg
     {
         for (int i = 0; i < _emailMessages.Count(); i++)
         {
-            await smtpClient.SendMailAsync(_emailMessages[i]);
+            var mail = _emailMessages[1];
+            await smtpClient.SendMailAsync(mail);
         }
     }
 }
