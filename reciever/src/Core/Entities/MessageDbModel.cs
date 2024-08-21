@@ -8,6 +8,7 @@ public class MessageDbModel
 
     public string? recipient { get; set; }
     public string? message { get; set; }
+    public string? subject { get; set; }
     public MessageType messageType { get; set; }
 
     public DateTime recievedAt { get; set; }
