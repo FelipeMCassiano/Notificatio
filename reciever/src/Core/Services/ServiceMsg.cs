@@ -7,34 +7,29 @@ using reciever.Core.Entities;
 using reciever.Infrastructure.Email;
 using reciever.Infrastructure.Messaging;
 using reciever.Infrastructure.Data;
-using reciever.Core.Interfaces;
 
 namespace reciever.Core.Services;
 
-public class ServiceMsg : IServiceMsg
+public class ServiceMsg
 {
     private IModel _channel;
     private SmtpClient _smtpClient;
     private static MailAddress _fromAddress = new MailAddress("");
     private List<MailMessage> _emailMessages = new List<MailMessage>();
-    private ApplicationDbContext _dbContext;
+    public ApplicationDbContext _dbContext { get; set; }
 
-    public ServiceMsg(ApplicationDbContext context)
+    public ServiceMsg(ApplicationDbContext dbContext)
     {
-        _smtpClient = new SmtpClientFactory("demoraiscassianofelipe@gmail.com", "xvxp aqtz dusb glrx").CreateSmtpClient();
+        _smtpClient = new SmtpClientFactory("demoraiscassianofelipe@gmail.com", "ycmn akrk gyzt zzli").CreateSmtpClient();
         _channel = new RabbitMqModelFactory("localhost").CreateModel();
-        _dbContext = context;
+        _dbContext = dbContext;
     }
-
 
     public Task ReceiveMessage(CancellationToken cancellationToken)
     {
         var queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queue: queueName, exchange: "messages", routingKey: "email");
-
         var consumer = new EventingBasicConsumer(_channel);
-
-        Console.WriteLine("a1");
 
         consumer.Received += async (model, ea) =>
         {
@@ -42,45 +37,64 @@ public class ServiceMsg : IServiceMsg
             var message = Encoding.UTF8.GetString(body);
             var routingKey = ea.RoutingKey;
 
-            var email = JsonSerializer.Deserialize<MessageModel>(message);
-            if (email == null)
+            try
             {
-                throw new Exception();
+                var email = JsonSerializer.Deserialize<MessageModel>(message);
+
+                if (email == null)
+                {
+                    throw new Exception("Failed to deserialize message");
+                }
+
+                await ProcessEmailMessage(email, cancellationToken);
             }
-            Console.WriteLine("a2");
-
-            await ProcessEmailMessage(email, cancellationToken);
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately, e.g., log them
+                Console.Error.WriteLine($"Error processing message: {ex.Message}");
+            }
         };
+
         _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
-
         return Task.CompletedTask;
     }
-    public Task CreateEmailMessage(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
+
+    private async Task CreateEmailMessage(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
     {
-
-        var message = new MailMessage(_fromAddress, toAddress)
+        if (toAddress == null || email == null)
         {
-            Subject = email.subject,
-            Body = email.message
-        };
+            throw new ArgumentNullException("toAddress or email cannot be null");
+        }
 
-        _emailMessages.Add(message);
-
-        return Task.CompletedTask;
-
-    }
-    public async Task SendEmails()
-    {
-        for (int i = 0; i < _emailMessages.Count(); i++)
+        try
         {
-            var mail = _emailMessages[1];
-            await _smtpClient.SendMailAsync(mail);
+            var message = new MailMessage(_fromAddress, toAddress)
+
+            {
+                Subject = email.subject,
+                Body = email.message,
+
+            };
+            _emailMessages.Add(message);
+            foreach (var mail in _emailMessages)
+            {
+                await _smtpClient.SendMailAsync(mail);
+            }
 
         }
+        catch (Exception)
+        {
+            throw new Exception("erorr nessa porra de create email");
+        }
+
+
     }
-    public async Task ProcessEmailMessage(MessageModel email, CancellationToken cancellationToken)
+
+
+
+
+    private async Task ProcessEmailMessage(MessageModel email, CancellationToken cancellationToken)
     {
-        Console.WriteLine("a3");
         using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
@@ -92,29 +106,24 @@ public class ServiceMsg : IServiceMsg
                 subject = email.subject,
                 recievedAt = DateTime.Now
             };
-            await _dbContext.AddAsync(messageDb, cancellationToken);
 
             var toAddress = new MailAddress(email.recipient);
-
             await CreateEmailMessage(toAddress, email, cancellationToken);
 
-            await SendEmails();
 
             messageDb.sendedAt = DateTime.Now;
-
-            _dbContext.Update(messageDb);
+            await _dbContext.AddAsync(messageDb, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
         }
-        catch
+        catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-
+            // Handle exceptions appropriately, e.g., log them
+            Console.Error.WriteLine($"Error processing email message: {ex.Message}");
         }
-
     }
-
 }
 

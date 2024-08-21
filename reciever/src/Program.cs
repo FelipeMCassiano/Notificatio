@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using reciever;
-using reciever.Core.Interfaces;
 using reciever.Core.Services;
 using reciever.Infrastructure.Data;
 
@@ -10,7 +9,7 @@ var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
     options.UseMySql(connString, ServerVersion.AutoDetect(connString))
 );
-builder.Services.AddTransient<IServiceMsg, ServiceMsg>();
+builder.Services.AddTransient<ServiceMsg>();
 
 builder.Services.AddHostedService<Worker>();
 

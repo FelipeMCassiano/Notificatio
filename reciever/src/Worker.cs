@@ -1,6 +1,6 @@
 namespace reciever;
 
-using reciever.Core.Interfaces;
+using reciever.Core.Services;
 
 public class Worker : BackgroundService
 {
@@ -9,6 +9,7 @@ public class Worker : BackgroundService
 
     public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
     {
+
         _logger = logger;
         _serviceProvider = serviceProvider;
     }
@@ -19,10 +20,11 @@ public class Worker : BackgroundService
         {
             try
             {
-                using var scope = _serviceProvider.CreateScope();
-                var _service = scope.ServiceProvider.GetRequiredService<IServiceMsg>();
+                var scope = _serviceProvider.CreateScope();
 
-                await _service.ReceiveMessage(stoppingToken);
+                var _serviceMsg = scope.ServiceProvider.GetRequiredService<ServiceMsg>();
+                await _serviceMsg.ReceiveMessage(stoppingToken);
+
             }
             catch (Exception ex)
             {
