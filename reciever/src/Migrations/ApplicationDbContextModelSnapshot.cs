@@ -24,11 +24,9 @@ namespace reciever.Migrations
 
             modelBuilder.Entity("reciever.Core.Entities.MessageDbModel", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("message")
                         .HasColumnType("longtext");
@@ -44,6 +42,9 @@ namespace reciever.Migrations
 
                     b.Property<DateTime>("sendedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("subject")
+                        .HasColumnType("longtext");
 
                     b.HasKey("id");
 

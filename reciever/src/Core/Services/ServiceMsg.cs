@@ -7,10 +7,11 @@ using reciever.Core.Entities;
 using reciever.Infrastructure.Email;
 using reciever.Infrastructure.Messaging;
 using reciever.Infrastructure.Data;
+using reciever.Core.Interfaces;
 
 namespace reciever.Core.Services;
 
-public class ServiceMsg
+public class ServiceMsg : IServiceMsg
 {
     private IModel _channel;
     private SmtpClient _smtpClient;
@@ -33,6 +34,7 @@ public class ServiceMsg
 
         var consumer = new EventingBasicConsumer(_channel);
 
+        Console.WriteLine("a1");
 
         consumer.Received += async (model, ea) =>
         {
@@ -45,6 +47,7 @@ public class ServiceMsg
             {
                 throw new Exception();
             }
+            Console.WriteLine("a2");
 
             await ProcessEmailMessage(email, cancellationToken);
         };
@@ -52,7 +55,7 @@ public class ServiceMsg
 
         return Task.CompletedTask;
     }
-    private Task CreateEmailMessage(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
+    public Task CreateEmailMessage(MailAddress toAddress, MessageModel email, CancellationToken cancellationToken)
     {
 
         var message = new MailMessage(_fromAddress, toAddress)
@@ -66,7 +69,7 @@ public class ServiceMsg
         return Task.CompletedTask;
 
     }
-    private async Task SendEmails()
+    public async Task SendEmails()
     {
         for (int i = 0; i < _emailMessages.Count(); i++)
         {
@@ -75,8 +78,9 @@ public class ServiceMsg
 
         }
     }
-    private async Task ProcessEmailMessage(MessageModel email, CancellationToken cancellationToken)
+    public async Task ProcessEmailMessage(MessageModel email, CancellationToken cancellationToken)
     {
+        Console.WriteLine("a3");
         using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {

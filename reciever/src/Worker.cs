@@ -1,27 +1,28 @@
 namespace reciever;
 
-using reciever.Core.Services;
+using reciever.Core.Interfaces;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly ServiceMsg _service;
+    private readonly IServiceProvider _serviceProvider;
 
-    public Worker(ILogger<Worker> logger, ServiceMsg service)
+    public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _service = service;
+        _serviceProvider = serviceProvider;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-
             try
             {
+                using var scope = _serviceProvider.CreateScope();
+                var _service = scope.ServiceProvider.GetRequiredService<IServiceMsg>();
+
                 await _service.ReceiveMessage(stoppingToken);
-                await _service.SendEmails();
             }
             catch (Exception ex)
             {

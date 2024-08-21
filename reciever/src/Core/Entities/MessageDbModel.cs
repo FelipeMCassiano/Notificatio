@@ -3,8 +3,7 @@ namespace reciever.Core.Entities;
 
 public class MessageDbModel
 {
-    [Key]
-    public int id { get; set; }
+    public Guid id { get; set; }
 
     public string? recipient { get; set; }
     public string? message { get; set; }
