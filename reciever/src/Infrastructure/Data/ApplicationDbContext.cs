@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using reciever.Core.Entities;
 namespace reciever.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions options) : base(options) { }
+    public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
-    public DbSet<MessageModel> Messages { get; set; } = null!;
+    public DbSet<MessageDbModel> Messages { get; set; } = null!;
 
 
 }

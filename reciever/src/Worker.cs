@@ -1,14 +1,16 @@
 namespace reciever;
-using reciever.Service;
+
+using reciever.Core.Services;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly ServiceMsg service = new ServiceMsg();
+    private readonly ServiceMsg _service;
 
-    public Worker(ILogger<Worker> logger)
+    public Worker(ILogger<Worker> logger, ServiceMsg service)
     {
         _logger = logger;
+        _service = service;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -18,8 +20,8 @@ public class Worker : BackgroundService
 
             try
             {
-                await service.ReceiveMessage(stoppingToken);
-                await service.SendEmails();
+                await _service.ReceiveMessage(stoppingToken);
+                await _service.SendEmails();
             }
             catch (Exception ex)
             {

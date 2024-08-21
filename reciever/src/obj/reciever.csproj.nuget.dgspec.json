@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/felipe/projects/notificatio/reciever/reciever.csproj": {}
+    "/home/felipe/projects/notificatio/reciever/src/reciever.csproj": {}
   },
   "projects": {
-    "/home/felipe/projects/notificatio/reciever/reciever.csproj": {
+    "/home/felipe/projects/notificatio/reciever/src/reciever.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/felipe/projects/notificatio/reciever/reciever.csproj",
+        "projectUniqueName": "/home/felipe/projects/notificatio/reciever/src/reciever.csproj",
         "projectName": "reciever",
-        "projectPath": "/home/felipe/projects/notificatio/reciever/reciever.csproj",
+        "projectPath": "/home/felipe/projects/notificatio/reciever/src/reciever.csproj",
         "packagesPath": "/home/felipe/.nuget/packages/",
-        "outputPath": "/home/felipe/projects/notificatio/reciever/obj/",
+        "outputPath": "/home/felipe/projects/notificatio/reciever/src/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/felipe/.nuget/NuGet/NuGet.Config"

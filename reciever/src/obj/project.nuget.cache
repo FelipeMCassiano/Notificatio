@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pkHkki2ccSX9QoUlYxG1HC/HziK5jEFxTsHN2x5fmpB9eEt5BS1LFV7DqdwCtvRTXV4RYRHRKpbN697qXeuliQ==",
+  "dgSpecHash": "vhdyMvXevzLkVdmv/mExt6nmwXKPY/eqJOXy1KqPX8aOIINHnHmWAeSyxFhmpB/w+TSWyVBJSOCgOtgDbLKRDw==",
   "success": true,
-  "projectFilePath": "/home/felipe/projects/notificatio/reciever/reciever.csproj",
+  "projectFilePath": "/home/felipe/projects/notificatio/reciever/src/reciever.csproj",
   "expectedPackageFiles": [
     "/home/felipe/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/felipe/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
