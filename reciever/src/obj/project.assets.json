@@ -1379,6 +1379,19 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
+      },
+      "Tomlyn/0.17.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Tomlyn.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Tomlyn.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -3499,6 +3512,23 @@
         "system.threading.channels.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Tomlyn/0.17.0": {
+      "sha512": "3BRbxOjZwgdXBGemOvJWuydaG/KsKrnG1Z15Chruvih8Tc8bgtLcmDgo6LPRqiF5LNh6X4Vmos7YuGteBHfePA==",
+      "type": "package",
+      "path": "tomlyn/0.17.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net7.0/Tomlyn.dll",
+        "lib/net7.0/Tomlyn.xml",
+        "lib/netstandard2.0/Tomlyn.dll",
+        "lib/netstandard2.0/Tomlyn.xml",
+        "logo.png",
+        "readme.md",
+        "tomlyn.0.17.0.nupkg.sha512",
+        "tomlyn.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -3506,7 +3536,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 8.0.8",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Pomelo.EntityFrameworkCore.MySql >= 8.0.2",
-      "RabbitMQ.Client >= 6.8.1"
+      "RabbitMQ.Client >= 6.8.1",
+      "Tomlyn >= 0.17.0"
     ]
   },
   "packageFolders": {
@@ -3563,6 +3594,10 @@
           "RabbitMQ.Client": {
             "target": "Package",
             "version": "[6.8.1, )"
+          },
+          "Tomlyn": {
+            "target": "Package",
+            "version": "[0.17.0, )"
           }
         },
         "imports": [

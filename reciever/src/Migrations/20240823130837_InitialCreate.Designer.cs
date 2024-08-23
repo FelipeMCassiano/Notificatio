@@ -12,7 +12,7 @@ using reciever.Infrastructure.Data;
 namespace reciever.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240821174449_InitialCreate")]
+    [Migration("20240823130837_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,9 +34,6 @@ namespace reciever.Migrations
                     b.Property<string>("message")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("messageType")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("recievedAt")
                         .HasColumnType("datetime(6)");
 
@@ -46,7 +43,13 @@ namespace reciever.Migrations
                     b.Property<DateTime>("sendedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("sender")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("subject")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("type")
                         .HasColumnType("longtext");
 
                     b.HasKey("id");

@@ -9,30 +9,30 @@ public class Worker : BackgroundService
 
     public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
     {
-
         _logger = logger;
         _serviceProvider = serviceProvider;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+
+
+        try
+        {
+
+            var scope = _serviceProvider.CreateScope();
+
+            var _serviceMsg = scope.ServiceProvider.GetRequiredService<ServiceMsg>();
+            await _serviceMsg.ReceiveMessage(stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send email at {time}", DateTime.Now);
+        }
+
         while (!stoppingToken.IsCancellationRequested)
         {
-            try
-            {
-                var scope = _serviceProvider.CreateScope();
-
-                var _serviceMsg = scope.ServiceProvider.GetRequiredService<ServiceMsg>();
-                await _serviceMsg.ReceiveMessage(stoppingToken);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to send email at {time}", DateTime.Now);
-            }
-
-
-            await Task.Delay(6000, stoppingToken);
+            await Task.Delay(10000, stoppingToken);
         }
     }
     public override Task StopAsync(CancellationToken cancellationToken)

@@ -250,3 +250,4 @@
 /home/felipe/projects/notificatio/reciever/src/obj/Debug/net8.0/reciever.csproj.CopyComplete
 /home/felipe/projects/notificatio/reciever/src/obj/Debug/net8.0/reciever.genruntimeconfig.cache
 /home/felipe/projects/notificatio/reciever/src/obj/Debug/net8.0/ref/reciever.dll
+/home/felipe/projects/notificatio/reciever/src/bin/Debug/net8.0/Tomlyn.dll

@@ -14,5 +14,5 @@ builder.Services.AddTransient<ServiceMsg>();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
-await host.RunAsync();
+host.Run();
 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vhdyMvXevzLkVdmv/mExt6nmwXKPY/eqJOXy1KqPX8aOIINHnHmWAeSyxFhmpB/w+TSWyVBJSOCgOtgDbLKRDw==",
+  "dgSpecHash": "MRFv3rgSofqGPj/kmfHTd2dU+8I0dxldJZ+Ipo4b2Y9gTwqTLzEO6gOjA9fmaLB9f6RCzL49Cf/iPUIxPKRBjw==",
   "success": true,
   "projectFilePath": "/home/felipe/projects/notificatio/reciever/src/reciever.csproj",
   "expectedPackageFiles": [
@@ -68,6 +68,7 @@
     "/home/felipe/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
     "/home/felipe/.nuget/packages/system.text.json/8.0.4/system.text.json.8.0.4.nupkg.sha512",
     "/home/felipe/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512",
+    "/home/felipe/.nuget/packages/tomlyn/0.17.0/tomlyn.0.17.0.nupkg.sha512",
     "/home/felipe/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.6/microsoft.aspnetcore.app.ref.8.0.6.nupkg.sha512"
   ],
   "logs": []
