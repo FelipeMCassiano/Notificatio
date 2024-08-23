@@ -1,13 +1,23 @@
 version: "3.9"
 services:
-    # notificatio:
-    #   build: 
-    #     context: ./notificatio/Dockerfile
-    #     hostname: notificatio
-
+    mysql:
+        image: mysql:latest
+        hostname: mysql
+        environment:
+            MYSQL_DATABASE: db
+            MYSQL_PASSWORD: 1234 
+            MYSQL_ROOT_PASSWORD: 5678
+            MYSQL_USER: notificatio
+        ports:
+            - 3306:3306
+        # networks:
+            # - notificatio
     rabbitmq:
         image: rabbitmq:3.13-management
         hostname: rabbitmq
         ports:
             - 5672:5672
             - 15672:15672
+        # networks:
+          # - notificatio
+# networks: notificatio: driver: bridge name: notificatio-net
