@@ -23,23 +23,20 @@ public class SendService
 
     }
 
-    public async Task PublishMessage(MessageModel message)
+    public async Task PublishMessage(MessageRequest request)
     {
         await CreateExchange();
 
-        var rK = message.messageType switch
-        {
-            MessageType.SMS => "sms",
-            MessageType.EMAIl => "email",
-            _ => throw new ArgumentException(nameof(message.messageType), "Argument out of index")
+        string rK = request.isEmail ? request.messageType : request.isSMS ? request.messageType : throw new Exception("Invalid Message type");
 
-        };
+        var guid = Guid.NewGuid();
+
+        var message = new MessageModel(guid, request.sender, request.recipient, request.subject, request.message, request.messageType);
 
         var msg = JsonSerializer.Serialize(message);
 
         var body = Encoding.UTF8.GetBytes(msg);
-        _channel.BasicPublish(exchange: "messages", routingKey: rK, body: body);
-
+        _channel.BasicPublish(exchange: "messages", routingKey: rK.ToLower(), body: body);
         return;
     }
 

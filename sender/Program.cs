@@ -3,7 +3,9 @@ using Send.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<SendService>();
 
@@ -14,11 +16,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.MapPost("/send", async (MessageModel message, SendService service) =>
+app.MapPost("/send", async (MessageRequest message, SendService service) =>
 {
 
     try
     {
+
+        Console.WriteLine($"recipient:{message.recipient}");
         await service.PublishMessage(message);
         return Results.Ok();
     }
