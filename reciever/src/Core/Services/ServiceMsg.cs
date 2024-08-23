@@ -23,7 +23,7 @@ public class ServiceMsg
         var config = new ConfigSmtpFactory().LoadConfig();
 
         _smtpClient = new SmtpClientFactory(config.userName, config.password, config.host, config.port, config.enableSsl).CreateSmtpClient();
-        _channel = new RabbitMqModelFactory("localhost").CreateModel();
+        _channel = new RabbitMqModelFactory("rabbitmq").CreateModel();
         _serviceProvider = serviceProvider;
     }
 
