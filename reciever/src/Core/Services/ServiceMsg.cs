@@ -7,7 +7,6 @@ using reciever.Core.Entities;
 using reciever.Infrastructure.Email;
 using reciever.Infrastructure.Messaging;
 using reciever.Infrastructure.Data;
-using Tomlyn;
 using reciever.Infrastructure.Config;
 
 namespace reciever.Core.Services;
@@ -21,7 +20,9 @@ public class ServiceMsg
 
     public ServiceMsg(IServiceProvider serviceProvider)
     {
-        _smtpClient = new SmtpClientFactory("demoraiscassianofelipe@gmail.com", "ycmn akrk gyzt zzli").CreateSmtpClient();
+        var config = new ConfigSmtpFactory().LoadConfig();
+
+        _smtpClient = new SmtpClientFactory(config.userName, config.password, config.host, config.port, config.enableSsl).CreateSmtpClient();
         _channel = new RabbitMqModelFactory("localhost").CreateModel();
         _serviceProvider = serviceProvider;
     }
@@ -123,13 +124,6 @@ public class ServiceMsg
                 await transaction.RollbackAsync(cancellationToken);
             }
         }
-    }
-    private SmtpConfig ReadToml()
-    {
-        var contents = File.ReadAllText(@"../../notificatio.toml");
-
-        var model = Toml.ToModel<SmtpConfig>(contents);
-        return model;
     }
 
 }
