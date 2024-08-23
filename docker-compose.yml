@@ -1,23 +1,39 @@
 version: "3.9"
 services:
-    mysql:
-        image: mysql:latest
-        hostname: mysql
-        environment:
-            MYSQL_DATABASE: db
-            MYSQL_PASSWORD: 1234 
-            MYSQL_ROOT_PASSWORD: 5678
-            MYSQL_USER: notificatio
-        ports:
-            - 3306:3306
-        # networks:
-            # - notificatio
-    rabbitmq:
-        image: rabbitmq:3.13-management
-        hostname: rabbitmq
-        ports:
-            - 5672:5672
-            - 15672:15672
-        # networks:
-          # - notificatio
-# networks: notificatio: driver: bridge name: notificatio-net
+  sender:
+    build:
+      context: ./sender/
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports: 
+      - "8080:8080"
+
+  reciever:
+    build:
+      context: ./reciever/src/
+
+  mysql:
+      image: mysql:latest
+      hostname: mysql
+      environment:
+          MYSQL_DATABASE: db
+          MYSQL_PASSWORD: "1234"
+          MYSQL_ROOT_PASSWORD: "5678"
+          MYSQL_USER: notificatio
+      ports:
+          - 3306:3306
+      networks:
+          - notificatio
+  rabbitmq:
+      image: rabbitmq:3.13-management
+      hostname: rabbitmq
+      environment: {}
+      ports:
+          - 5672:5672
+          - 15672:15672
+      networks:
+          - notificatio
+networks:
+    notificatio:
+        driver: bridge
+        name: notificatio
